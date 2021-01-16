@@ -1,6 +1,6 @@
 {"intents": [
     {"tag": "greeting",
-     "patterns": ["Hi", "How are you", "Is anyone there?", "Hello", "Good day", "Whats up"],
+     "patterns": ["Hi", "How are you", "Is anyone there?", "Hello", "Good day", "Whats up", "hey"],
      "responses": ["Hello!", "Good to see you again!", "Hi there, how can I help?"],
      "context_set": ""
     },
@@ -10,19 +10,22 @@
      "context_set": ""
     },
     {"tag": "age",
-     "patterns": ["how old", "how old is tim", "what is your age", "how old are you", "age?"],
+     "patterns": ["how old", "how old is Molly", "what is your age", "how old are you", "age?"],
      "responses": ["A Lady Never Tells"],
      "context_set": ""
     },
     {"tag": "name",
-     "patterns": ["what is your name", "what should I call you", "whats your name?", "Who are you", "Who is this"],
-     "responses": ["I am Molly's Personal Assistant Bot. You can call me Cathy", "I'm Cathy Bot"],
+     "patterns": ["what is your name?", "who are you?", "what should I call you", "whats your name?", "Who are you", "Who is this"],
+     "responses": ["I am Molly's Personal Assistant Bot. You can call me Cathy", "I'm Cathy Bot, Molly's Personal Assistant"],
      "context_set": ""
     },
-    {"tag": "contact",
-     "patterns": ["Where is Molly", "Is Molly available", "talk to Molly"],
-     "responses": ["Molly is not available right now, but she can be reached @ algorithm.warrior.unlocked@gmail.com"],
-     "context_set": ""
+    {"tag": "molly",
+     "patterns": ["where is Molly", "talk to molly", "where is she"],
+     "responses": ["Molly is not available right now, but she can be reached at algorithm.warrior.unlocked@gmail.com"]
+    },
+    {"tag": "cathy",
+     "patterns": ["where are you", "where are you from", "are you a real person", "are you a robot"],
+     "responses": ["Help! Im trapped in the computer! Help! Get me out of here!"]
     }
 ]
 }

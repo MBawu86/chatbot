@@ -11,30 +11,30 @@ import pickle
 
 with open("intents.json") as file:
     data = json.load(file)
-print(data["intents"])
-
-words = []
-labels = []
-docs_x = []
-docs_y = []
 
 #stop prepocessing multiple times?stop rurunning code
 try:
-    with open('data.pickle', 'rb') as f:
-        words, labels, training, output = pickle.load(f) 
+    with open("data.pickle", "rb") as f:
+        words, labels, training, output = pickle.load(f)
 except:
+    words = []
+    labels = []
+    docs_x = []
+    docs_y = []
+
     for intent in data["intents"]:
-        for pattern in intent ['patterns']:
+        for pattern in intent["patterns"]:
             wrds = nltk.word_tokenize(pattern)
             words.extend(wrds)
-            docs_x.append(pattern)
-            docs_y.append(intent['tag'])
+            docs_x.append(wrds)
+            docs_y.append(intent["tag"])
 
-            if intent['tag'] not in labels:
-                labels.append(intent['tag'])
+        if intent["tag"] not in labels:
+            labels.append(intent["tag"])
+
 
     #sorts and lowercases input
-    words = [stemmer.stem(w.lower()) for w in words if w != '?']
+    words = [stemmer.stem(w.lower()) for w in words if w != "?"]
     words = sorted(list(set(words)))
 
     labels = sorted(labels)
@@ -49,7 +49,7 @@ except:
     for x, doc in enumerate(docs_x):
         bag = []
 
-        wrds = [stemmer.stem(w)for w in doc]
+        wrds = [stemmer.stem(w.lower)for w in doc]
 
     #go through words in doc 
 
@@ -63,9 +63,8 @@ except:
             bag.append(0)
 
             #append into trainng and output
-
         output_row = out_empty[:]
-        output_row [labels.index(docs_y[x])] = 1
+        output_row[labels.index(docs_y[x])] = 1
 
         training.append(bag)
         output.append(output_row)
@@ -94,42 +93,51 @@ model = tflearn.DNN(net)
 
 # stop training of model if a model already exist
 try:
-    model.load('model.tflearn')
+    # model.load('model.tflearn')
+    molly.py
 except:
 #pass training data
 #number epoch = number of times NN sees same data
-    model.fit(training, output, n_epoch=10000, batch_size=8, show_metric=True)
-    model.save('model.tflearn')
+    model.fit(training, output, n_epoch=100, batch_size=8, show_metric=True)
+    model.save("model.tflearn")
 
 #classifying model turn user input into BoW
-def bag_of_words(s,words):
+def bag_of_words(s, words):
     bag = [0 for _ in range(len(words))]
     s_words = nltk.word_tokenize(s)
     # stem words
     s_words = [stemmer.stem(word.lower()) for word in s_words]
-    #loop to generate words
-    for sentence in s_words:
-        for i, w in enumerate(words):
-            if w == sentence:
-                bag[i] = (1)
-    return numpy.array(bag)
 
+    #loop to generate words
+    for se in s_words:
+        for i, w in enumerate(words):
+            if w == se:
+                bag[i] = 1
+            
+    return numpy.array(bag)
 # ask user for input
+ 
 def chat():
-    print("Let's chat! (type quit to end chat)")
+    
+    print("Hello. How may I help you? (type quit to shush me)")
     while True:
         inp = input("You: ")
         #prevent loop from running infinitely
+    
         if inp.lower() == "quit":
-            break
+            break    
         #turn input into BoW, feed into model, get model response --- function
         results = model.predict([bag_of_words(inp, words)])
         results_index = numpy.argmax(results)
         tag = labels[results_index]
-        
-        for tags in data['intents']:
+   
+    while results[results_index] > 0.7:
+        for tags in data["intents"]:
             if tags['tag'] == tag:
                 responses = tags['responses']
 
         print(random.choice(responses))
-chat()
+    else:
+        print('I didnt innerstand that. Could you rephrase it please?')
+
+chat()     
