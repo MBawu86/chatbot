@@ -124,6 +124,12 @@ def chat():
             break
         #turn input into BoW, feed into model, get model response --- function
         results = model.predict([bag_of_words(inp, words)])
-       
-       print results()
+        results_index = numpy.argmax(results)
+        tag = labels[results_index]
+        
+        for tags in data['intents']:
+            if tags['tag'] == tag:
+                responses = tags['responses']
+
+        print(random.choice(responses))
 chat()
